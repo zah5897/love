@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        ">
+
+	<!-- 启动自动扫描 该包下所有的Bean(@Controller) -->
+	<context:component-scan base-package="com.zhan.app.sl.controller" />
+
+	<mvc:resources mapping="/images/origin/**" location="/love_upload/images/origin/" />
+	<mvc:resources mapping="/images/thumb/**" location="/love_upload/images/thumb/" />
+
+
+	<mvc:resources mapping="/avatar/origin/**" location="/love_upload/avatar/origin/" />
+	<mvc:resources mapping="/avatar/thumb/**" location="/love_upload/avatar/thumb/" />
+
+
+
+
+	<!-- 拦截器 -->
+	<bean id="handlerMapping"
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="paramInterceptor" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="paramInterceptor" class="com.zhan.app.sl.filter.ParamInterceptor" />
+
+
+
+
+	<!-- 输出对象转JSON支持 -->
+
+
+	<!-- 绑定数据类型 -->
+	<!-- 解决日期类型数据绑定问题 -->
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+
+	<bean id="webBindingInitializer"
+		class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+		<property name="conversionService" ref="conversionService"></property>
+	</bean>
+
+	<!-- 请求处理返回数据类型 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="fastjsonMessageConverter"></ref>
+			</list>
+		</property>
+		<property name="webBindingInitializer" ref="webBindingInitializer">
+		</property>
+	</bean>
+
+
+
+	<bean id="fastjsonMessageConverter"
+		class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+				<value>application/json</value>
+			</list>
+		</property>
+		<property name="features">
+			<list>
+				<!-- 是否显示值为null的字段<value>WriteMapNullValue</value> -->
+				<value>QuoteFieldNames</value>
+			</list>
+		</property>
+	</bean>
+
+
+
+
+
+	<!-- 系统异常拦截 -->
+	<bean class="com.zhan.app.sl.exception.AppExceptionHandler" />
+
+	<!-- 支持文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- <property name="defaultEncoding" value="utf-8"></property> <property 
+			name="maxUploadSize" value="10485760000"></property> <property name="maxInMemorySize" 
+			value="40960"></property> -->
+	</bean>
+
+
+
+	<!-- 定义视图解析器 -->
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+</beans>

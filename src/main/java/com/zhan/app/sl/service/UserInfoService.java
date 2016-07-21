@@ -1,7 +1,9 @@
 package com.zhan.app.sl.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -245,14 +247,21 @@ public class UserInfoService {
 		}
 	}
 
-	public void updateRelationship(long user_id, long with_user_id, int relationship) {
-		userInfoDao.updateRelationship(user_id, with_user_id, relationship);
+	public void updateRelationship(User user, long with_user_id, int relationship) {
+		userInfoDao.updateRelationship(user.getUser_id(), with_user_id, relationship);
 
 		//判断对方是否也已经喜欢我了
 		if (relationship == Relationship.LIKE.ordinal()) {
-			int count = userInfoDao.isLikeMe(user_id, with_user_id);
+			int count = userInfoDao.isLikeMe(user.getUser_id(), with_user_id);
 			if (count >0) {
-                Object result= Main.sendTxtMessage(String.valueOf(user_id), new String[] { String.valueOf(with_user_id) }, "很高兴认识你!");
+				ImagePathUtil.completeAvatarPath(user, true);
+				
+				
+				Map<String, String> ext=new HashMap<String, String>();
+				ext.put("nickname", user.getNick_name());
+				ext.put("avatar", user.getAvatar());
+				ext.put("origin_avatar", user.getOrigin_avatar());
+                Object result= Main.sendTxtMessage(String.valueOf(user.getUser_id()), new String[] { String.valueOf(with_user_id) }, "很高兴认识你!",ext);
 				if (result != null) {
 					System.out.println(result);
 				}

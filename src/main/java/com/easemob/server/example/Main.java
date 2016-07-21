@@ -73,7 +73,12 @@ public class Main {
 		 */
 		
 		
-		System.out.println(sendTxtMessage("25",new String[]{"26"},"hello"));
+		Map<String, String> ext=new HashMap<String, String>();
+		ext.put("nickname", "测试昵称");
+		ext.put("avatar", "");
+		ext.put("origin_avatar", "");
+		
+		System.out.println(sendTxtMessage("25",new String[]{"26"},"hello",ext));
 	}
 
 	public static Object registUser(String userName, String password, String nickname) {
@@ -92,7 +97,7 @@ public class Main {
 		return user.modifyIMUserNickNameWithAdminToken(userName, payload);
 	}
 
-	public static Object sendTxtMessage(String from, String[] users, String msgTxt) {
+	public static Object sendTxtMessage(String from, String[] users, String msgTxt,Map<String, String> ext) {
 		initFactory();
 		// {
 		// "target_type" : "users", // users 给用户发消息。chatgroups: 给群发消息，chatrooms:
@@ -110,7 +115,7 @@ public class Main {
 		// }
 		
 		
-		BodyWrapper payload = new TextMessageBody("users", users, from, null,msgTxt);
+		BodyWrapper payload = new TextMessageBody("users", users, from, ext,msgTxt);
 		SendMessageAPI message = (SendMessageAPI) factory.newInstance(EasemobRestAPIFactory.SEND_MESSAGE_CLASS);
 		return message.sendMessage(payload);
 	}

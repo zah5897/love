@@ -96,6 +96,12 @@ public class HomeController {
 		if (user_id < 0) {
 			return ResultUtil.getResultMap(ERROR.ERR_USER_NOT_EXIST);
 		}
+		User user=userService.getUser(user_id);
+		
+		if(user==null){
+			return ResultUtil.getResultMap(ERROR.ERR_USER_NOT_EXIST);
+		}
+		
 		if (TextUtils.isEmpty(token)) {
 			return ResultUtil.getResultMap(ERROR.ERR_NO_LOGIN);
 		}
@@ -111,7 +117,7 @@ public class HomeController {
 				if (user_id == with_user) {
 					continue;
 				}
-				userInfoService.updateRelationship(user_id, with_user, Relationship.LIKE.ordinal());
+				userInfoService.updateRelationship(user, with_user, Relationship.LIKE.ordinal());
 			} catch (NumberFormatException e) {
 			}
 		}

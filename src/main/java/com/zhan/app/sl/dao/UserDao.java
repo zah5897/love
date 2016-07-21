@@ -5,14 +5,12 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.zhan.app.sl.bean.User;
 import com.zhan.app.sl.bean.mapper.SimpkleUserMapper;
 
-@SuppressWarnings("unchecked")
 @Repository("userDao")
 public class UserDao extends BaseDao {
 	@Resource

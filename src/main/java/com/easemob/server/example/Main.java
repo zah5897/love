@@ -74,11 +74,11 @@ public class Main {
 		
 		
 		Map<String, String> ext=new HashMap<String, String>();
-		ext.put("nickname", "测试昵称");
+		ext.put("nickname", "测试昵称25");
 		ext.put("avatar", "");
 		ext.put("origin_avatar", "");
 		
-		System.out.println(sendTxtMessage("25",new String[]{"26"},"hello",ext));
+		System.out.println(sendTxtMessage("25",new String[]{"15"},"hello",ext));
 	}
 
 	public static Object registUser(String userName, String password, String nickname) {

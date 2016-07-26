@@ -268,6 +268,11 @@ public class UserInfoService {
 			}
 		}
 	}
+	public void updateRelationshipToIgnore(User user, long with_user_id, int relationship) {
+		userInfoDao.updateRelationship(user.getUser_id(), with_user_id, relationship);
+	}
+	
+	
 
 	public List<User> getLikeMeUsers(long user_id, long last_user_id, int page_size) {
 		List<User> users = userInfoDao.getLikeMeUsers(user_id, last_user_id, page_size);

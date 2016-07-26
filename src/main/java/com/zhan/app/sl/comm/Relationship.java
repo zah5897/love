@@ -1,5 +1,5 @@
 package com.zhan.app.sl.comm;
 
 public enum Relationship {
-	DEFAULT,LIKE;
+	DEFAULT,LIKE,IGNORE;
 }

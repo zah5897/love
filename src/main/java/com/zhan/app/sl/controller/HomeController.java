@@ -123,6 +123,40 @@ public class HomeController {
 		}
 		return ResultUtil.getResultOKMap();
 	}
+	
+	@RequestMapping("ignore")
+	public ModelMap ignore(long user_id, String token, String with_user_id) {
+
+		if (user_id < 0) {
+			return ResultUtil.getResultMap(ERROR.ERR_USER_NOT_EXIST);
+		}
+		User user=userService.getUser(user_id);
+		
+		if(user==null){
+			return ResultUtil.getResultMap(ERROR.ERR_USER_NOT_EXIST);
+		}
+		
+		if (TextUtils.isEmpty(token)) {
+			return ResultUtil.getResultMap(ERROR.ERR_NO_LOGIN);
+		}
+
+		if (TextUtils.isEmpty(with_user_id)) {
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM);
+		}
+
+		String[] with_ids = with_user_id.split(",");
+		for (String id : with_ids) {
+			try {
+				long with_user = Long.parseLong(id);
+				if (user_id == with_user) {
+					continue;
+				}
+				userInfoService.updateRelationshipToIgnore(user, with_user, Relationship.IGNORE.ordinal());
+			} catch (NumberFormatException e) {
+			}
+		}
+		return ResultUtil.getResultOKMap();
+	}
 
 	@RequestMapping("like_each")
 	public ModelMap like_each(long user_id, String token, long last_user_id, int page_size) {

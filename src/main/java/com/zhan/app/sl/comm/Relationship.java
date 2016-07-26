@@ -1,4 +1,4 @@
-package com.zhan.app.sl.util;
+package com.zhan.app.sl.comm;
 
 public enum Relationship {
 	DEFAULT,LIKE;

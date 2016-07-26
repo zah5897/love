@@ -16,12 +16,12 @@ import com.zhan.app.sl.bean.Image;
 import com.zhan.app.sl.bean.Tag;
 import com.zhan.app.sl.bean.User;
 import com.zhan.app.sl.cache.InfoCacheService;
+import com.zhan.app.sl.comm.Relationship;
 import com.zhan.app.sl.controller.UserInfoController;
 import com.zhan.app.sl.dao.TagDao;
 import com.zhan.app.sl.dao.UserInfoDao;
 import com.zhan.app.sl.util.ImagePathUtil;
 import com.zhan.app.sl.util.RedisKeys;
-import com.zhan.app.sl.util.Relationship;
 import com.zhan.app.sl.util.TextUtils;
 
 @Service
@@ -271,6 +271,15 @@ public class UserInfoService {
 
 	public List<User> getLikeMeUsers(long user_id, long last_user_id, int page_size) {
 		List<User> users = userInfoDao.getLikeMeUsers(user_id, last_user_id, page_size);
+		if (users != null) {
+			for (User user : users) {
+				ImagePathUtil.completeAvatarPath(user, true); // 补全图片链接地址
+			}
+		}
+		return users;
+	}
+	public List<User> getFatePlaceUsers(long user_id, long last_user_id, int page_size) {
+		List<User> users = userInfoDao.getOnlyLikeMeUsers(user_id, last_user_id, page_size);
 		if (users != null) {
 			for (User user : users) {
 				ImagePathUtil.completeAvatarPath(user, true); // 补全图片链接地址

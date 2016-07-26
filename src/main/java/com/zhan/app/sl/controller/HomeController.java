@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zhan.app.sl.bean.Tag;
 import com.zhan.app.sl.bean.User;
+import com.zhan.app.sl.comm.Relationship;
 import com.zhan.app.sl.exception.ERROR;
 import com.zhan.app.sl.service.UserInfoService;
 import com.zhan.app.sl.service.UserService;
-import com.zhan.app.sl.util.Relationship;
 import com.zhan.app.sl.util.ResultUtil;
 import com.zhan.app.sl.util.TextUtils;
 
@@ -83,7 +83,7 @@ public class HomeController {
 			}
 		}
 
-		List<User> users = userInfoService.getLikeMeUsers(user_id, last_user, page_size);
+		List<User> users = userInfoService.getFatePlaceUsers(user_id, last_user, page_size);
 		ModelMap result = ResultUtil.getResultOKMap();
 		result.put("users", users);
 		return result;

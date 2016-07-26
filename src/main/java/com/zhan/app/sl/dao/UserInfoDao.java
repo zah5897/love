@@ -22,8 +22,8 @@ import com.zhan.app.sl.bean.User;
 import com.zhan.app.sl.bean.mapper.FateUserMapper;
 import com.zhan.app.sl.bean.mapper.FoundUserMapper;
 import com.zhan.app.sl.bean.mapper.SimpkleUserMapper;
+import com.zhan.app.sl.comm.Relationship;
 import com.zhan.app.sl.util.DateTimeUtil;
-import com.zhan.app.sl.util.Relationship;
 
 @Repository("userInfoDao")
 public class UserInfoDao extends BaseDao {
@@ -161,6 +161,18 @@ public class UserInfoDao extends BaseDao {
 
 	public List<User> getLikeMeUsers(long user_id, long last_user_id, int page_size) {
 		return jdbcTemplate.query("select user.user_id,user.nick_name,user.avatar,user.sex  from t_user user right join t_relationship rp on user.user_id=rp.user_id where rp.with_user_id=? and relationship=? and user.user_id>? order by user.user_id  limit ?", new Object[] { user_id, Relationship.LIKE.ordinal(), last_user_id, page_size }, new FateUserMapper());
+	}
+	
+	public List<User> getOnlyLikeMeUsers(long user_id, long last_user_id, int page_size) {
+		return jdbcTemplate.query("select user.user_id,user.nick_name,user.avatar,user.sex  "
+				+ "from t_user user,"
+				+ "t_relationship onlyLm "
+				+ "where onlyLm.with_user_id=? and "
+				+ "user.user_id=onlyLm.user_id  and  "
+				+ "onlyLm.relationship=? and "
+				+ "onlyLm.user_id not in (select with_user_id from  t_relationship where user_id=? and relationship=?) and "
+				+ "user.user_id>? "
+				+ "order by user.user_id  limit ?", new Object[] { user_id, Relationship.LIKE.ordinal(),user_id,Relationship.LIKE.ordinal(), last_user_id, page_size }, new FateUserMapper());
 	}
 	public List<User> getLikeEachUsers(long user_id, long last_user_id, int page_size) {
 		

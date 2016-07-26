@@ -78,7 +78,8 @@ public class Main {
 		ext.put("avatar", "");
 		ext.put("origin_avatar", "");
 		
-		System.out.println(sendTxtMessage("25",new String[]{"15"},"hello",ext));
+		System.out.println(sendTxtMessage("15",new String[]{"26"},"hello",ext));
+//		System.out.println(sendTxtMessage("25",new String[]{"15"},"hello",ext));
 	}
 
 	public static Object registUser(String userName, String password, String nickname) {

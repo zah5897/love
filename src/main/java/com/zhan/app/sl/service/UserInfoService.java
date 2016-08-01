@@ -268,7 +268,7 @@ public class UserInfoService {
 			}
 		}
 	}
-	public void updateRelationshipToIgnore(User user, long with_user_id, int relationship) {
+	public void updateRelationshipNOHX(User user, long with_user_id, int relationship) {
 		userInfoDao.updateRelationship(user.getUser_id(), with_user_id, relationship);
 	}
 	

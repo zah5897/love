@@ -96,12 +96,12 @@ public class HomeController {
 		if (user_id < 0) {
 			return ResultUtil.getResultMap(ERROR.ERR_USER_NOT_EXIST);
 		}
-		User user=userService.getUser(user_id);
-		
-		if(user==null){
+		User user = userService.getUser(user_id);
+
+		if (user == null) {
 			return ResultUtil.getResultMap(ERROR.ERR_USER_NOT_EXIST);
 		}
-		
+
 		if (TextUtils.isEmpty(token)) {
 			return ResultUtil.getResultMap(ERROR.ERR_NO_LOGIN);
 		}
@@ -123,19 +123,19 @@ public class HomeController {
 		}
 		return ResultUtil.getResultOKMap();
 	}
-	
+
 	@RequestMapping("ignore")
 	public ModelMap ignore(long user_id, String token, String with_user_id) {
 
 		if (user_id < 0) {
 			return ResultUtil.getResultMap(ERROR.ERR_USER_NOT_EXIST);
 		}
-		User user=userService.getUser(user_id);
-		
-		if(user==null){
+		User user = userService.getUser(user_id);
+
+		if (user == null) {
 			return ResultUtil.getResultMap(ERROR.ERR_USER_NOT_EXIST);
 		}
-		
+
 		if (TextUtils.isEmpty(token)) {
 			return ResultUtil.getResultMap(ERROR.ERR_NO_LOGIN);
 		}
@@ -151,7 +151,7 @@ public class HomeController {
 				if (user_id == with_user) {
 					continue;
 				}
-				userInfoService.updateRelationshipToIgnore(user, with_user, Relationship.IGNORE.ordinal());
+				userInfoService.updateRelationshipNOHX(user, with_user, Relationship.IGNORE.ordinal());
 			} catch (NumberFormatException e) {
 			}
 		}
@@ -161,11 +161,10 @@ public class HomeController {
 	@RequestMapping("like_each")
 	public ModelMap like_each(long user_id, String token, long last_user_id, int page_size) {
 
-		
-		if(page_size>50){
+		if (page_size > 50) {
 			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("每页数量超出限制"));
 		}
-		
+
 		if (user_id < 0) {
 			return ResultUtil.getResultMap(ERROR.ERR_USER_NOT_EXIST);
 		}
@@ -173,6 +172,20 @@ public class HomeController {
 			return ResultUtil.getResultMap(ERROR.ERR_NO_LOGIN);
 		}
 		List<User> users = userInfoService.getLikeEachUsers(user_id, last_user_id, page_size);
+		ModelMap result = ResultUtil.getResultOKMap();
+		result.put("users", users);
+		return result;
+	}
+
+	@RequestMapping("look_around")
+	public ModelMap look_around(String lat, String lng, Integer count) {
+		int realCount;
+		if (count == null || count <= 0) {
+			realCount = 5;
+		} else {
+			realCount = count;
+		}
+		List<User> users = userInfoService.getRandUsers(0, lat, lng, realCount);
 		ModelMap result = ResultUtil.getResultOKMap();
 		result.put("users", users);
 		return result;

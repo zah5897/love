@@ -85,4 +85,11 @@ public class UserService {
 		// userCacheService.cacheValidateCode(mobile, code);
 		return count;
 	}
+	
+	public int updateVisitor(long user_id, String device_token,String lat, String lng,String zh_cn) {
+		int count = userDao.updateVisitor(user_id, device_token, lat, lng, zh_cn);
+		return count;
+	}
+	
+	
 }

@@ -79,4 +79,7 @@ public class UserDao extends BaseDao {
 	public int updateLocation(long user_id, String lat, String lng) {
 		return jdbcTemplate.update("update t_user set lat=?,lng=? where user_id=?", new Object[] { lat, lng, user_id });
 	}
+	public int updateVisitor(long user_id, String device_token,String lat, String lng,String zh_cn) {
+		return jdbcTemplate.update("update t_user set device_token=?,zh_cn=? lat=?,lng=? where user_id=?", new Object[] {device_token,zh_cn ,lat, lng, user_id });
+	}
 }

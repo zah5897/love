@@ -3,14 +3,12 @@ package com.easemob.server.example;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.easemob.server.example.api.IMUserAPI;
 import com.easemob.server.example.api.SendMessageAPI;
 import com.easemob.server.example.comm.ClientContext;
 import com.easemob.server.example.comm.EasemobRestAPIFactory;
 import com.easemob.server.example.comm.body.IMUserBody;
-import com.easemob.server.example.comm.body.MessageBody;
 import com.easemob.server.example.comm.body.TextMessageBody;
 import com.easemob.server.example.comm.wrapper.BodyWrapper;
 

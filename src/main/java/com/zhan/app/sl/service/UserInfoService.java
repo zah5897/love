@@ -59,7 +59,7 @@ public class UserInfoService {
 		return tagDao.getTagsByType(type);
 	}
 
-	public User getUserInfo(long user_id) {
+	public User getUserInfo(long user_id,long last_image_id,int count) {
 		User user = userInfoDao.getUserInfo(user_id);
 		if (user != null) {
 
@@ -69,7 +69,12 @@ public class UserInfoService {
 			// 补全 tag 属性
 			setTagByIds(user);
 			// 补全images属性
-			List<Image> userImages = userInfoDao.getUserImages(user_id);
+			
+			if(count<=0){
+				count=5;
+			}
+			
+			List<Image> userImages = userInfoDao.getUserImages(user_id,last_image_id,count);
 			ImagePathUtil.completeImagePath(userImages, true); // 补全图片路径
 			user.setImages(userImages);
 		}

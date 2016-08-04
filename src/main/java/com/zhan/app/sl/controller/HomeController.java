@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zhan.app.sl.bean.Tag;
 import com.zhan.app.sl.bean.User;
 import com.zhan.app.sl.comm.Relationship;
+import com.zhan.app.sl.comm.UserType;
 import com.zhan.app.sl.exception.ERROR;
 import com.zhan.app.sl.service.UserInfoService;
 import com.zhan.app.sl.service.UserService;
@@ -177,8 +178,36 @@ public class HomeController {
 		return result;
 	}
 
+	
+	//游客接口
 	@RequestMapping("look_around")
-	public ModelMap look_around(String lat, String lng, Integer count) {
+	public ModelMap look_around(String deviceId,String token,String zh_cn,String lat, String lng, Integer count) {
+		
+	    if(!TextUtils.isEmpty(zh_cn)){
+	    	if(zh_cn.length()>2){
+	    		return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("zh-cn has too long,max &lt 2"));
+	    	}
+	    }
+		
+	    if(TextUtils.isEmpty(deviceId)){
+	    	return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("deviceId is empty"));
+	    }
+	    
+	    User user=userService.findUserByMobile(deviceId);
+	    if(user==null){
+	    	
+	    	user=new User();
+	    	user.setMobile(deviceId);
+	    	user.setDevice_token(token);
+	    	user.setLat(lat);
+	    	user.setLng(lng);
+	    	user.setZh_cn(zh_cn);
+	    	user.setType((short)UserType.VISITOR.ordinal());
+	    	userService.insertUser(user);
+	    }else{
+	    	userService.updateVisitor(user.getUser_id(), token, lat, lng, zh_cn);
+	    }
+		
 		int realCount;
 		if (count == null || count <= 0) {
 			realCount = 5;
@@ -188,6 +217,7 @@ public class HomeController {
 		List<User> users = userInfoService.getRandUsers(0, lat, lng, realCount);
 		ModelMap result = ResultUtil.getResultOKMap();
 		result.put("users", users);
+		result.put("user", user);
 		return result;
 	}
 

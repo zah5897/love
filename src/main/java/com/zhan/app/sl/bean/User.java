@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.zhan.app.sl.annotation.ColumnType;
+import com.zhan.app.sl.comm.UserType;
 import com.zhan.app.sl.util.DateTimeUtil;
 
 public class User {
@@ -97,12 +98,21 @@ public class User {
 	@JSONField(serialize = false)
 	private String want_to_where;
 
-	
-	
 	@JSONField(serialize = false)
 	private String disc;
-	
-	
+
+	// 区分游客和正式用户
+	@JSONField(serialize = false)
+	private short type = (short) UserType.OFFIEC.ordinal(); // 默认为正式用户
+
+	// 区分国外用户
+	@JSONField(serialize = false)
+	private String zh_cn;
+
+	// 设备token
+	@JSONField(serialize = false)
+	private String device_token;;
+
 	public long getUser_id() {
 		return user_id;
 	}
@@ -375,6 +385,30 @@ public class User {
 		this.disc = disc;
 	}
 
+	public short getType() {
+		return type;
+	}
+
+	public void setType(short type) {
+		this.type = type;
+	}
+
+	public String getZh_cn() {
+		return zh_cn;
+	}
+
+	public void setZh_cn(String zh_cn) {
+		this.zh_cn = zh_cn;
+	}
+
+	public String getDevice_token() {
+		return device_token;
+	}
+
+	public void setDevice_token(String device_token) {
+		this.device_token = device_token;
+	}
+
 	/**
 	 * 隐藏系统信息
 	 */
@@ -388,21 +422,22 @@ public class User {
 		setLat(null);
 		setLng(null);
 	}
+
 	@JSONField(serialize = false)
 	public Object getBasicUserInfoMap() {
 		Map<String, Object> basicInfo = new HashMap<String, Object>();
 		basicInfo.put("user_id", user_id);
-		basicInfo.put("nick_name", nick_name!=null?nick_name:new String());
-		basicInfo.put("age", age!=null?age:new String());
-		basicInfo.put("sex", sex!=null?sex:new String());
-		basicInfo.put("avatar", avatar!=null?avatar:new String());
-		basicInfo.put("origin_avatar", origin_avatar!=null?origin_avatar:new String());
-		basicInfo.put("signature", signature!=null?signature:new String());
+		basicInfo.put("nick_name", nick_name != null ? nick_name : new String());
+		basicInfo.put("age", age != null ? age : new String());
+		basicInfo.put("sex", sex != null ? sex : new String());
+		basicInfo.put("avatar", avatar != null ? avatar : new String());
+		basicInfo.put("origin_avatar", origin_avatar != null ? origin_avatar : new String());
+		basicInfo.put("signature", signature != null ? signature : new String());
 		basicInfo.put("birthday", DateTimeUtil.parseBirthday(birthday));
-		basicInfo.put("weight", weight!=null?weight:new String());
-		basicInfo.put("height", height!=null?height:new String());
-		basicInfo.put("images", images!=null?images:new ArrayList<Image>());
-		basicInfo.put("jobs", jobs!=null?jobs:new ArrayList<Tag>());
+		basicInfo.put("weight", weight != null ? weight : new String());
+		basicInfo.put("height", height != null ? height : new String());
+		basicInfo.put("images", images != null ? images : new ArrayList<Image>());
+		basicInfo.put("jobs", jobs != null ? jobs : new ArrayList<Tag>());
 		return basicInfo;
 	}
 

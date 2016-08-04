@@ -181,7 +181,7 @@ public class HomeController {
 	
 	//游客接口
 	@RequestMapping("look_around")
-	public ModelMap look_around(String deviceId,String token,String zh_cn,String lat, String lng, Integer count) {
+	public ModelMap look_around(String deviceId,String deviceToken,String zh_cn,String lat, String lng, Integer count) {
 		
 	    if(!TextUtils.isEmpty(zh_cn)){
 	    	if(zh_cn.length()>2){
@@ -198,14 +198,14 @@ public class HomeController {
 	    	
 	    	user=new User();
 	    	user.setMobile(deviceId);
-	    	user.setDevice_token(token);
+	    	user.setDevice_token(deviceToken);
 	    	user.setLat(lat);
 	    	user.setLng(lng);
 	    	user.setZh_cn(zh_cn);
 	    	user.setType((short)UserType.VISITOR.ordinal());
 	    	userService.insertUser(user);
 	    }else{
-	    	userService.updateVisitor(user.getUser_id(), token, lat, lng, zh_cn);
+	    	userService.updateVisitor(user.getUser_id(), deviceToken, lat, lng, zh_cn);
 	    }
 		
 		int realCount;

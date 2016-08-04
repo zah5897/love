@@ -127,7 +127,7 @@ public class UserInfoController {
 		
 		userInfoService.modify_info(user_id, nick_name, age, jobs, height, weight, signature, my_tags, interest,
 				favourite_animal, favourite_music, weekday_todo, footsteps, want_to_where,isNick_modify);
-		return detial_info(user_id,null,null);
+		return detial_info(user_id,null,null,null);
 	}
 
 	@RequestMapping("tags")
@@ -140,9 +140,21 @@ public class UserInfoController {
 		return result;
 	}
 
+	
+	//获取自己的详情或者别人的详细信息
 	@RequestMapping("detial_info")
-	public ModelMap detial_info(long user_id_for,Long last_image_id,Integer count) {
+	public ModelMap detial_info(Long user_id,Long user_id_for,Long last_image_id,Integer count) {
 
+		
+		if(user_id==null&&user_id_for==null){
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
+		}
+		
+		
+		//
+		if(user_id_for==null){
+			user_id_for=user_id;
+		}
 		if (user_id_for < 1) {
 			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
 		}

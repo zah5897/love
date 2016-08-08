@@ -269,13 +269,13 @@ public class UserInfoService {
 			int count = userInfoDao.isLikeMe(user.getUser_id(), with_user.getUser_id());
 			if (count >0) {
 				ImagePathUtil.completeAvatarPath(with_user, true);
-				
+				ImagePathUtil.completeAvatarPath(user, true);
 				
 				//发送给对方
 				Map<String, String> ext=new HashMap<String, String>();
-				ext.put("nickname", with_user.getNick_name());
-				ext.put("avatar", with_user.getAvatar());
-				ext.put("origin_avatar", with_user.getOrigin_avatar());
+				ext.put("nickname", user.getNick_name());
+				ext.put("avatar", user.getAvatar());
+				ext.put("origin_avatar", user.getOrigin_avatar());
                 Object result= Main.sendTxtMessage(String.valueOf(user.getUser_id()), new String[] { String.valueOf(with_user.getUser_id()) }, "很高兴认识你!",ext);
 				if (result != null) {
 					System.out.println(result);
@@ -283,11 +283,11 @@ public class UserInfoService {
 				
 				
 				//发送给自己
-				ImagePathUtil.completeAvatarPath(user, true);
+				
 				ext=new HashMap<String, String>();
-				ext.put("nickname", user.getNick_name());
-				ext.put("avatar", user.getAvatar());
-				ext.put("origin_avatar", user.getOrigin_avatar());
+				ext.put("nickname", with_user.getNick_name());
+				ext.put("avatar", with_user.getAvatar());
+				ext.put("origin_avatar", with_user.getOrigin_avatar());
                 result= Main.sendTxtMessage(String.valueOf(with_user.getUser_id()), new String[] { String.valueOf(user.getUser_id()) }, "很高兴认识你!",ext);
 				if (result != null) {
 					System.out.println(result);

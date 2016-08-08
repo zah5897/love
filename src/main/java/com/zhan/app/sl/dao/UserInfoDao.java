@@ -23,6 +23,7 @@ import com.zhan.app.sl.bean.mapper.FateUserMapper;
 import com.zhan.app.sl.bean.mapper.FoundUserMapper;
 import com.zhan.app.sl.bean.mapper.SimpkleUserMapper;
 import com.zhan.app.sl.comm.Relationship;
+import com.zhan.app.sl.comm.UserType;
 import com.zhan.app.sl.util.DateTimeUtil;
 
 @Repository("userInfoDao")
@@ -149,12 +150,13 @@ public class UserInfoDao extends BaseDao {
 				new Object[] { user_id, id });
 	}
 
+	//随机获取用户（排除游客）
 	public List<User> getRandUsers(long user_id,String lat, String lng, int count) {
 		String disc = " ROUND(6378.138*2*ASIN(SQRT(POW(SIN((?*PI()/180-lat*PI()/180)/2),2)+COS(?*PI()/180)*COS(lat*PI()/180)*POW(SIN((?*PI()/180-lng*PI()/180)/2),2)))*1000) AS juli";
 		return jdbcTemplate.query(
 				"select user_id,avatar, nick_name,birthday,job_ids,lat,lng,interest_ids, " + disc
-						+ " from t_user where user_id<>? order by rand() limit ?",
-				new Object[] { lat, lat, lng,user_id, count }, new FoundUserMapper());
+						+ " from t_user where user_id<>? and type <> ? order by rand() limit ?",
+				new Object[] { lat, lat, lng,user_id, UserType.VISITOR.ordinal(),count }, new FoundUserMapper());
 
 	}
 
@@ -178,8 +180,8 @@ public class UserInfoDao extends BaseDao {
 				+ "user.user_id=onlyLm.user_id  and  "
 				+ "onlyLm.relationship=? and "
 				+ "onlyLm.user_id not in (select with_user_id from  t_relationship where user_id=? and relationship=?) and "
-				+ "user.user_id>? "
-				+ "order by user.user_id  limit ?", new Object[] { user_id, Relationship.LIKE.ordinal(),user_id,Relationship.LIKE.ordinal(), last_user_id, page_size }, new FateUserMapper());
+				+ "user.user_id>? and user.type<>? "
+				+ "order by user.user_id  limit ?", new Object[] { user_id, Relationship.LIKE.ordinal(),user_id,Relationship.LIKE.ordinal(), last_user_id,UserType.VISITOR.ordinal(), page_size }, new FateUserMapper());
 	}
 	public List<User> getLikeEachUsers(long user_id, long last_user_id, int page_size) {
 		
@@ -191,9 +193,9 @@ public class UserInfoDao extends BaseDao {
 				+ "and me.with_user_id=friend.user_id "
 				+ "and me.relationship=? "
 				+ "and me.with_user_id=user.user_id "
-				+ "and me.with_user_id>? and me.user_id=? order by me.with_user_id limit ?";
+				+ "and me.with_user_id>? and me.user_id=? and user.type<>? order by me.with_user_id limit ?";
 		
-		return jdbcTemplate.query(sql, new Object[] { Relationship.LIKE.ordinal(),last_user_id,user_id, page_size }, new FateUserMapper());
+		return jdbcTemplate.query(sql, new Object[] { Relationship.LIKE.ordinal(),last_user_id,user_id,UserType.VISITOR.ordinal(), page_size }, new FateUserMapper());
 	}
 
 	

@@ -1,10 +1,8 @@
 package com.zhan.app.sl.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -26,6 +24,7 @@ import com.zhan.app.sl.util.ImagePathUtil;
 import com.zhan.app.sl.util.ImageSaveUtils;
 import com.zhan.app.sl.util.ResultUtil;
 import com.zhan.app.sl.util.TextUtils;
+import com.zhan.app.sl.util.UserDetailInfoUtil;
 
 @RestController
 @RequestMapping("/user")
@@ -99,8 +98,8 @@ public class UserInfoController {
 	}
 
 	@RequestMapping("modify_info")
-	public ModelMap modify_info(long user_id, String token, String nick_name, String age, String jobs,
-			String height, String weight, String signature, String my_tags, String interest, String favourite_animal,
+	public ModelMap modify_info(long user_id, String token, String nick_name, String age, String jobs, String height,
+			String weight, String signature, String my_tags, String interest, String favourite_animal,
 			String favourite_music, String weekday_todo, String footsteps, String want_to_where) {
 		if (user_id < 1) {
 			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
@@ -116,18 +115,18 @@ public class UserInfoController {
 		} else if (!token.equals(user.getToken())) {
 			return ResultUtil.getResultMap(ERROR.ERR_NO_LOGIN);
 		}
-		boolean isNick_modify=false;
-		if(user.getNick_name()!=null){
-			if(!user.getNick_name().equals(nick_name)){
-				isNick_modify=true;
+		boolean isNick_modify = false;
+		if (user.getNick_name() != null) {
+			if (!user.getNick_name().equals(nick_name)) {
+				isNick_modify = true;
 			}
-		}else if(!TextUtils.isEmpty(nick_name)){
-			isNick_modify=true;
+		} else if (!TextUtils.isEmpty(nick_name)) {
+			isNick_modify = true;
 		}
-		
+
 		userInfoService.modify_info(user_id, nick_name, age, jobs, height, weight, signature, my_tags, interest,
-				favourite_animal, favourite_music, weekday_todo, footsteps, want_to_where,isNick_modify);
-		return detial_info(user_id,null,null,null);
+				favourite_animal, favourite_music, weekday_todo, footsteps, want_to_where, isNick_modify);
+		return detial_info(user_id, null, null);
 	}
 
 	@RequestMapping("tags")
@@ -140,54 +139,33 @@ public class UserInfoController {
 		return result;
 	}
 
-	
-	//获取自己的详情或者别人的详细信息
+	// 获取自己的详情或者别人的详细信息
 	@RequestMapping("detial_info")
-	public ModelMap detial_info(Long user_id,Long user_id_for,Long last_image_id,Integer count) {
+	public ModelMap detial_info(Long user_id, Long user_id_for, Integer count) {
+		if (user_id_for != null && user_id_for > 0) {
+			user_id = user_id_for;
+		}
+		if (count == null || count <= 0) {
+			count = 4;
+		}
+		return UserDetailInfoUtil.getDetailInfo(userInfoService, user_id, count);
+	}
 
-		
-		if(user_id==null&&user_id_for==null){
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
-		}
-		
-		
-		//
-		if(user_id_for==null){
-			user_id_for=user_id;
-		}
-		if (user_id_for < 1) {
+	@RequestMapping("list_image")
+	public ModelMap list_image(Long user_id, Long last_image_id,Integer count) {
+		if(user_id==null||user_id<1){
 			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
 		}
 		
 		if(last_image_id==null||last_image_id<0){
-			last_image_id=new Long(0);
+			last_image_id=0l;
 		}
-		
-		if(count==null||count<0){
-			count=new Integer(0);
+		if(count==null||count<=0){
+			count=5;
 		}
-		
-		User user = userInfoService.getUserInfo(user_id_for,last_image_id,count);
-		//
-		if (user == null) {
-			return ResultUtil.getResultMap(ERROR.ERR_USER_NOT_EXIST, "该用户不存在！");
-		}
+		List<Image> images=userInfoService.getUserImages(user_id, last_image_id, count);	
 		ModelMap result = ResultUtil.getResultOKMap();
-
-		Map<String, Object> secret_me = new HashMap<String, Object>();
-		secret_me.put("interest", user.getInterest()!=null?user.getInterest():new ArrayList<Tag>());
-		secret_me.put("favourite_animal", user.getFavourite_animal()!=null?user.getFavourite_animal():new ArrayList<Tag>());
-		secret_me.put("favourite_music", user.getFavourite_music()!=null?user.getFavourite_music():new ArrayList<Tag>());
-		secret_me.put("weekday_todo", user.getWeekday_todo()!=null?user.getWeekday_todo():new ArrayList<Tag>());
-		secret_me.put("footsteps", user.getFootsteps()!=null?user.getFootsteps():new ArrayList<Tag>());
-		secret_me.put("want_to_where", user.getWant_to_where()!=null?user.getWant_to_where():new String());
-
-		Map<String, Object> userJson = new HashMap<String, Object>();
-		userJson.put("about_me", user.getBasicUserInfoMap());
-		userJson.put("secret_me", secret_me);
-		userJson.put("my_tags", user.getMy_tags() != null ? user.getMy_tags() : new ArrayList<Tag>());
-
-		result.put("user", userJson);
+		result.put("images", images);
 		return result;
 	}
 

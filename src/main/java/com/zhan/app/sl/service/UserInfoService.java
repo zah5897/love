@@ -59,7 +59,7 @@ public class UserInfoService {
 		return tagDao.getTagsByType(type);
 	}
 
-	public User getUserInfo(long user_id,long last_image_id,int count) {
+	public User getUserInfo(long user_id,int count) {
 		User user = userInfoDao.getUserInfo(user_id);
 		if (user != null) {
 
@@ -71,15 +71,24 @@ public class UserInfoService {
 			// 补全images属性
 			
 			if(count<=0){
-				count=5;
+				count=4;
 			}
-			
-			List<Image> userImages = userInfoDao.getUserImages(user_id,last_image_id,count);
+			List<Image> userImages = userInfoDao.getUserImages(user_id,0,count);
 			ImagePathUtil.completeImagePath(userImages, true); // 补全图片路径
 			user.setImages(userImages);
 		}
 		return user;
 	}
+	
+	public List<Image> getUserImages(long user_id,long last_image_id,int count){
+		if(count<=0){
+			count=5;
+		}
+		List<Image> userImages = userInfoDao.getUserImages(user_id,last_image_id,count);
+		ImagePathUtil.completeImagePath(userImages, true); // 补全图片路径
+		return userImages;
+	}
+	
 
 	public int deleteImage(long user_id, String image_id) {
 		String[] ids = image_id.split(",");
@@ -252,21 +261,34 @@ public class UserInfoService {
 		}
 	}
 
-	public void updateRelationship(User user, long with_user_id, int relationship) {
-		userInfoDao.updateRelationship(user.getUser_id(), with_user_id, relationship);
+	public void updateRelationship(User user, User  with_user, int relationship) {
+		userInfoDao.updateRelationship(user.getUser_id(), with_user.getUser_id(), relationship);
 
 		//判断对方是否也已经喜欢我了
 		if (relationship == Relationship.LIKE.ordinal()) {
-			int count = userInfoDao.isLikeMe(user.getUser_id(), with_user_id);
+			int count = userInfoDao.isLikeMe(user.getUser_id(), with_user.getUser_id());
 			if (count >0) {
-				ImagePathUtil.completeAvatarPath(user, true);
+				ImagePathUtil.completeAvatarPath(with_user, true);
 				
 				
+				//发送给对方
 				Map<String, String> ext=new HashMap<String, String>();
+				ext.put("nickname", with_user.getNick_name());
+				ext.put("avatar", with_user.getAvatar());
+				ext.put("origin_avatar", with_user.getOrigin_avatar());
+                Object result= Main.sendTxtMessage(String.valueOf(user.getUser_id()), new String[] { String.valueOf(with_user.getUser_id()) }, "很高兴认识你!",ext);
+				if (result != null) {
+					System.out.println(result);
+				}
+				
+				
+				//发送给自己
+				ImagePathUtil.completeAvatarPath(user, true);
+				ext=new HashMap<String, String>();
 				ext.put("nickname", user.getNick_name());
 				ext.put("avatar", user.getAvatar());
 				ext.put("origin_avatar", user.getOrigin_avatar());
-                Object result= Main.sendTxtMessage(String.valueOf(user.getUser_id()), new String[] { String.valueOf(with_user_id) }, "很高兴认识你!",ext);
+                result= Main.sendTxtMessage(String.valueOf(with_user.getUser_id()), new String[] { String.valueOf(user.getUser_id()) }, "很高兴认识你!",ext);
 				if (result != null) {
 					System.out.println(result);
 				}

@@ -115,10 +115,11 @@ public class HomeController {
 		for (String id : with_ids) {
 			try {
 				long with_user = Long.parseLong(id);
-				if (user_id == with_user) {
+				User withUser=userService.getUser(with_user);
+				if (user_id == with_user||withUser==null) {
 					continue;
 				}
-				userInfoService.updateRelationship(user, with_user, Relationship.LIKE.ordinal());
+				userInfoService.updateRelationship(user, withUser, Relationship.LIKE.ordinal());
 			} catch (NumberFormatException e) {
 			}
 		}
@@ -178,36 +179,36 @@ public class HomeController {
 		return result;
 	}
 
-	
-	//游客接口
+	// 游客接口
 	@RequestMapping("look_around")
-	public ModelMap look_around(String deviceId,String deviceToken,String zh_cn,String lat, String lng, Integer count) {
-		
-	    if(!TextUtils.isEmpty(zh_cn)){
-	    	if(zh_cn.length()>2){
-	    		return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("zh-cn has too long,max &lt 2"));
-	    	}
-	    }
-		
-	    if(TextUtils.isEmpty(deviceId)){
-	    	return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("deviceId is empty"));
-	    }
-	    
-	    User user=userService.findUserByMobile(deviceId);
-	    if(user==null){
-	    	
-	    	user=new User();
-	    	user.setMobile(deviceId);
-	    	user.setDevice_token(deviceToken);
-	    	user.setLat(lat);
-	    	user.setLng(lng);
-	    	user.setZh_cn(zh_cn);
-	    	user.setType((short)UserType.VISITOR.ordinal());
-	    	userService.insertUser(user);
-	    }else{
-	    	userService.updateVisitor(user.getUser_id(), deviceToken, lat, lng, zh_cn);
-	    }
-		
+	public ModelMap look_around(String deviceId, String deviceToken, String zh_cn, String lat, String lng,
+			Integer count) {
+
+		if (!TextUtils.isEmpty(zh_cn)) {
+			if (zh_cn.length() > 2) {
+				return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("zh-cn has too long,max &lt 2"));
+			}
+		}
+
+		if (TextUtils.isEmpty(deviceId)) {
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("deviceId is empty"));
+		}
+
+		User user = userService.findUserByMobile(deviceId);
+		if (user == null) {
+
+			user = new User();
+			user.setMobile(deviceId);
+			user.setDevice_token(deviceToken);
+			user.setLat(lat);
+			user.setLng(lng);
+			user.setZh_cn(zh_cn);
+			user.setType((short) UserType.VISITOR.ordinal());
+			userService.insertUser(user);
+		} else {
+			userService.updateVisitor(user.getUser_id(), deviceToken, lat, lng, zh_cn);
+		}
+
 		int realCount;
 		if (count == null || count <= 0) {
 			realCount = 5;
@@ -220,5 +221,4 @@ public class HomeController {
 		result.put("user", user);
 		return result;
 	}
-
 }

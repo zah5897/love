@@ -25,11 +25,7 @@
 
 
 <!-- 静态资源过滤 -->
-
-
-<mvc:resources location="/manager/images/" mapping="/manager/images/**"/> 
-<mvc:resources location="/manager/lib/*" mapping="/manager/lib/**"/> 
-<mvc:resources location="/manager/stylesheets/*" mapping="/manager/stylesheets/**"/> 
+<mvc:resources mapping="/manager/**" location="/WEB-INF/manager/"/>
 
 
 

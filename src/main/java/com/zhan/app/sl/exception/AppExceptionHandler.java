@@ -15,7 +15,7 @@ public class AppExceptionHandler implements HandlerExceptionResolver {
 
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object obj,
 			Exception ex) {
-		WriteJsonUtil.write(response, ex);
+		WriteJsonUtil.write(request,response, ex);
 		log.error(ex.getMessage());
 		ex.printStackTrace();
 		return new ModelAndView();

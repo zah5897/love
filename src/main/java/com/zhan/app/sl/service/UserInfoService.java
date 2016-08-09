@@ -267,7 +267,7 @@ public class UserInfoService {
 		//判断对方是否也已经喜欢我了
 		if (relationship == Relationship.LIKE.ordinal()) {
 			int count = userInfoDao.isLikeMe(user.getUser_id(), with_user.getUser_id());
-			if (count >0) {
+			if (count >0) { //对方喜欢我了，这个时候我也喜欢对方了，需要互相发消息
 				ImagePathUtil.completeAvatarPath(with_user, true);
 				ImagePathUtil.completeAvatarPath(user, true);
 				
@@ -276,7 +276,7 @@ public class UserInfoService {
 				ext.put("nickname", user.getNick_name());
 				ext.put("avatar", user.getAvatar());
 				ext.put("origin_avatar", user.getOrigin_avatar());
-                Object result= Main.sendTxtMessage(String.valueOf(user.getUser_id()), new String[] { String.valueOf(with_user.getUser_id()) }, "很高兴认识你!",ext);
+                Object result= Main.sendTxtMessage(String.valueOf(user.getUser_id()), new String[] { String.valueOf(with_user.getUser_id()) }, "很高兴遇见你",ext);
 				if (result != null) {
 					System.out.println(result);
 				}
@@ -288,7 +288,14 @@ public class UserInfoService {
 				ext.put("nickname", with_user.getNick_name());
 				ext.put("avatar", with_user.getAvatar());
 				ext.put("origin_avatar", with_user.getOrigin_avatar());
-                result= Main.sendTxtMessage(String.valueOf(with_user.getUser_id()), new String[] { String.valueOf(user.getUser_id()) }, "很高兴认识你!",ext);
+                result= Main.sendTxtMessage(String.valueOf(with_user.getUser_id()), new String[] { String.valueOf(user.getUser_id()) }, "很高兴遇见你",ext);
+				if (result != null) {
+					System.out.println(result);
+				}
+			}else{
+				 //发现对方没喜欢我
+				  //需要申请添加好友
+				Object result=	Main.addFriend(String.valueOf(user.getUser_id()), String.valueOf(with_user.getUser_id()));
 				if (result != null) {
 					System.out.println(result);
 				}

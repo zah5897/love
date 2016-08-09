@@ -76,8 +76,10 @@ public class Main {
 		ext.put("avatar", "");
 		ext.put("origin_avatar", "");
 		
-		System.out.println(sendTxtMessage("15",new String[]{"26"},"hello",ext));
+		//System.out.println(sendTxtMessage("",new String[]{"13"},"hello",ext));
 //		System.out.println(sendTxtMessage("25",new String[]{"15"},"hello",ext));
+		
+		System.out.println(addFriend("26","15"));
 	}
 
 	public static Object registUser(String userName, String password, String nickname) {
@@ -117,5 +119,11 @@ public class Main {
 		BodyWrapper payload = new TextMessageBody("users", users, from, ext,msgTxt);
 		SendMessageAPI message = (SendMessageAPI) factory.newInstance(EasemobRestAPIFactory.SEND_MESSAGE_CLASS);
 		return message.sendMessage(payload);
+	}
+	
+	public static Object addFriend(String user_id,String friend_id){
+		initFactory();
+		IMUserAPI user = (IMUserAPI) factory.newInstance(EasemobRestAPIFactory.USER_CLASS);
+		return 	user.addFriendSingle(user_id, friend_id);
 	}
 }

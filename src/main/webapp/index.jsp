@@ -1,12 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
 <!DOCTYPE>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>注册</title>
+<title>你好</title>
 </head>
 <body>
+
+	<jsp:forward page="/manager/fwd_login?_ua=12345678900123456789" />
+	<!--  
 	<fieldset>
 		<legend>注册</legend>
 
@@ -35,5 +43,6 @@
 				<input type="submit" value="保存">
 		</form>
 	</fieldset>
+	-->
 </body>
 </html>

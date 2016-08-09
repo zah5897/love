@@ -67,9 +67,9 @@ public class HttpClientRestAPIInvoker implements RestAPIInvoker {
 			String msg = MessageTemplate.print(MessageTemplate.BLANK_OBJ_MSG, new String[]{"Parameter header"});
 			responseWrapper.addError(msg);
 		}
-		if( null == body || !body.validate() ) {
-			responseWrapper.addError(MessageTemplate.INVALID_BODY_MSG);
-		}
+		//if( null == body || !body.validate() ) {
+			//responseWrapper.addError(MessageTemplate.INVALID_BODY_MSG);
+		//}
 		
 		if( responseWrapper.hasError() ) {
 			return responseWrapper;
@@ -80,7 +80,7 @@ public class HttpClientRestAPIInvoker implements RestAPIInvoker {
 		log.debug("URL: " + url);
 		log.debug("Header: " + header);
 		log.debug("Body: " + ((null == body) ? "" : body.getBody()));
-		System.out.println(body.getBody());
+		System.out.println(body==null?"":body.getBody());
 		log.debug("Query: " + query);
 		log.debug("===========Request End===========");
 		

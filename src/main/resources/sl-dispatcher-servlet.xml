@@ -24,6 +24,14 @@
 
 
 
+<!-- 静态资源过滤 -->
+
+
+<mvc:resources location="/manager/images/" mapping="/manager/images/**"/> 
+<mvc:resources location="/manager/lib/*" mapping="/manager/lib/**"/> 
+<mvc:resources location="/manager/stylesheets/*" mapping="/manager/stylesheets/**"/> 
+
+
 
 	<!-- 拦截器 -->
 	<bean id="handlerMapping"
@@ -103,7 +111,7 @@
 	<!-- 定义视图解析器 -->
 	<bean id="jspViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="prefix" value="/WEB-INF/manager/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
 

@@ -8,9 +8,11 @@ import com.easemob.server.example.api.IMUserAPI;
 import com.easemob.server.example.api.SendMessageAPI;
 import com.easemob.server.example.comm.ClientContext;
 import com.easemob.server.example.comm.EasemobRestAPIFactory;
+import com.easemob.server.example.comm.body.CmdMessageBody;
 import com.easemob.server.example.comm.body.IMUserBody;
 import com.easemob.server.example.comm.body.TextMessageBody;
 import com.easemob.server.example.comm.wrapper.BodyWrapper;
+import com.zhan.app.sl.comm.MessageAction;
 
 public class Main {
 	private static EasemobRestAPIFactory factory;
@@ -71,15 +73,18 @@ public class Main {
 		 */
 		
 		
-		Map<String, String> ext=new HashMap<String, String>();
-		ext.put("nickname", "测试昵称25");
-		ext.put("avatar", "");
-		ext.put("origin_avatar", "");
+//		Map<String, String> ext=new HashMap<String, String>();
+//		ext.put("nickname", "测试昵称25");
+//		ext.put("avatar", "");
+//		ext.put("origin_avatar", "");
+//		
+//		//System.out.println(sendTxtMessage("",new String[]{"13"},"hello",ext));
+////		System.out.println(sendTxtMessage("25",new String[]{"15"},"hello",ext));
+//		
+//		System.out.println(addFriend("26","15"));
 		
-		//System.out.println(sendTxtMessage("",new String[]{"13"},"hello",ext));
-//		System.out.println(sendTxtMessage("25",new String[]{"15"},"hello",ext));
 		
-		System.out.println(addFriend("26","15"));
+		System.out.println(sendCmdMessage("admin",new String[]{"15"},null,MessageAction.ACTION_SOMEONE_LIKE_ME_TIP));
 	}
 
 	public static Object registUser(String userName, String password, String nickname) {
@@ -120,6 +125,18 @@ public class Main {
 		SendMessageAPI message = (SendMessageAPI) factory.newInstance(EasemobRestAPIFactory.SEND_MESSAGE_CLASS);
 		return message.sendMessage(payload);
 	}
+	
+	
+	public static Object sendCmdMessage(String from, String[] users,Map<String, String> ext,MessageAction action) {
+		initFactory();
+		BodyWrapper payload = new CmdMessageBody("users", users, from, ext,String.valueOf(action.ordinal()));
+		SendMessageAPI message = (SendMessageAPI) factory.newInstance(EasemobRestAPIFactory.SEND_MESSAGE_CLASS);
+		
+		
+		
+		return message.sendMessage(payload);
+	}
+	
 	
 	public static Object addFriend(String user_id,String friend_id){
 		initFactory();

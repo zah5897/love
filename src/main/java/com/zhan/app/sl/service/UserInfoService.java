@@ -16,6 +16,7 @@ import com.zhan.app.sl.bean.Image;
 import com.zhan.app.sl.bean.Tag;
 import com.zhan.app.sl.bean.User;
 import com.zhan.app.sl.cache.InfoCacheService;
+import com.zhan.app.sl.comm.MessageAction;
 import com.zhan.app.sl.comm.Relationship;
 import com.zhan.app.sl.controller.UserInfoController;
 import com.zhan.app.sl.dao.TagDao;
@@ -59,7 +60,7 @@ public class UserInfoService {
 		return tagDao.getTagsByType(type);
 	}
 
-	public User getUserInfo(long user_id,int count) {
+	public User getUserInfo(long user_id, int count) {
 		User user = userInfoDao.getUserInfo(user_id);
 		if (user != null) {
 
@@ -69,26 +70,25 @@ public class UserInfoService {
 			// 补全 tag 属性
 			setTagByIds(user);
 			// 补全images属性
-			
-			if(count<=0){
-				count=4;
+
+			if (count <= 0) {
+				count = 4;
 			}
-			List<Image> userImages = userInfoDao.getUserImages(user_id,0,count);
+			List<Image> userImages = userInfoDao.getUserImages(user_id, 0, count);
 			ImagePathUtil.completeImagePath(userImages, true); // 补全图片路径
 			user.setImages(userImages);
 		}
 		return user;
 	}
-	
-	public List<Image> getUserImages(long user_id,long last_image_id,int count){
-		if(count<=0){
-			count=5;
+
+	public List<Image> getUserImages(long user_id, long last_image_id, int count) {
+		if (count <= 0) {
+			count = 5;
 		}
-		List<Image> userImages = userInfoDao.getUserImages(user_id,last_image_id,count);
+		List<Image> userImages = userInfoDao.getUserImages(user_id, last_image_id, count);
 		ImagePathUtil.completeImagePath(userImages, true); // 补全图片路径
 		return userImages;
 	}
-	
 
 	public int deleteImage(long user_id, String image_id) {
 		String[] ids = image_id.split(",");
@@ -261,52 +261,60 @@ public class UserInfoService {
 		}
 	}
 
-	public void updateRelationship(User user, User  with_user, int relationship) {
+	public void updateRelationship(User user, User with_user, int relationship) {
 		userInfoDao.updateRelationship(user.getUser_id(), with_user.getUser_id(), relationship);
 
-		//判断对方是否也已经喜欢我了
+		// 判断对方是否也已经喜欢我了
 		if (relationship == Relationship.LIKE.ordinal()) {
 			int count = userInfoDao.isLikeMe(user.getUser_id(), with_user.getUser_id());
-			if (count >0) { //对方喜欢我了，这个时候我也喜欢对方了，需要互相发消息
+			if (count > 0) { // 对方喜欢我了，这个时候我也喜欢对方了，需要互相发消息
 				ImagePathUtil.completeAvatarPath(with_user, true);
 				ImagePathUtil.completeAvatarPath(user, true);
-				
-				//发送给对方
-				Map<String, String> ext=new HashMap<String, String>();
+
+				// 发送给对方
+				Map<String, String> ext = new HashMap<String, String>();
 				ext.put("nickname", user.getNick_name());
 				ext.put("avatar", user.getAvatar());
 				ext.put("origin_avatar", user.getOrigin_avatar());
-                Object result= Main.sendTxtMessage(String.valueOf(user.getUser_id()), new String[] { String.valueOf(with_user.getUser_id()) }, "很高兴遇见你",ext);
+				Object result = Main.sendTxtMessage(String.valueOf(user.getUser_id()),
+						new String[] { String.valueOf(with_user.getUser_id()) }, "很高兴遇见你", ext);
 				if (result != null) {
 					System.out.println(result);
 				}
-				
-				
-				//发送给自己
-				
-				ext=new HashMap<String, String>();
+
+				// 发送给自己
+
+				ext = new HashMap<String, String>();
 				ext.put("nickname", with_user.getNick_name());
 				ext.put("avatar", with_user.getAvatar());
 				ext.put("origin_avatar", with_user.getOrigin_avatar());
-                result= Main.sendTxtMessage(String.valueOf(with_user.getUser_id()), new String[] { String.valueOf(user.getUser_id()) }, "很高兴遇见你",ext);
+				result = Main.sendTxtMessage(String.valueOf(with_user.getUser_id()),
+						new String[] { String.valueOf(user.getUser_id()) }, "很高兴遇见你", ext);
 				if (result != null) {
 					System.out.println(result);
 				}
-			}else{
-				 //发现对方没喜欢我
-				  //需要申请添加好友
-				Object result=	Main.addFriend(String.valueOf(user.getUser_id()), String.valueOf(with_user.getUser_id()));
+			} else {
+				// 发现对方没喜欢我
+				// 需要申请添加好友
+				Object result = Main.addFriend(String.valueOf(user.getUser_id()),
+						String.valueOf(with_user.getUser_id()));
 				if (result != null) {
 					System.out.println(result);
 				}
+
+				result = Main.sendCmdMessage("admin", new String[] { String.valueOf(with_user.getUser_id()) }, null,
+						MessageAction.ACTION_SOMEONE_LIKE_ME_TIP);
+				if (result != null) {
+					System.out.println(result);
+				}
+
 			}
 		}
 	}
+
 	public void updateRelationshipNOHX(User user, long with_user_id, int relationship) {
 		userInfoDao.updateRelationship(user.getUser_id(), with_user_id, relationship);
 	}
-	
-	
 
 	public List<User> getLikeMeUsers(long user_id, long last_user_id, int page_size) {
 		List<User> users = userInfoDao.getLikeMeUsers(user_id, last_user_id, page_size);
@@ -317,6 +325,7 @@ public class UserInfoService {
 		}
 		return users;
 	}
+
 	public List<User> getFatePlaceUsers(long user_id, long last_user_id, int page_size) {
 		List<User> users = userInfoDao.getOnlyLikeMeUsers(user_id, last_user_id, page_size);
 		if (users != null) {

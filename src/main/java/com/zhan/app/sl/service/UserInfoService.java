@@ -302,8 +302,12 @@ public class UserInfoService {
 					System.out.println(result);
 				}
 
-				result = Main.sendCmdMessage("admin", new String[] { String.valueOf(with_user.getUser_id()) }, null,
-						MessageAction.ACTION_SOMEONE_LIKE_ME_TIP);
+				
+				Map<String, String> ext = new HashMap<String, String>();
+				ext.put("action", String.valueOf(MessageAction.ACTION_SOMEONE_LIKE_ME_TIP.ordinal()));
+				
+				
+				result = Main.sendCmdMessage("admin", new String[] { String.valueOf(with_user.getUser_id()) }, ext);
 				if (result != null) {
 					System.out.println(result);
 				}

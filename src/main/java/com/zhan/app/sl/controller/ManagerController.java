@@ -12,6 +12,7 @@ import com.zhan.app.sl.service.UserService;
 @Controller
 @RequestMapping("/manager")
 public class ManagerController {
+	@SuppressWarnings("unused")
 	private static Logger log = Logger.getLogger(ManagerController.class);
 	@Resource
 	private UserService userService;

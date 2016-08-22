@@ -84,7 +84,12 @@ public class Main {
 //		System.out.println(addFriend("26","15"));
 		
 		
-		System.out.println(sendCmdMessage("admin",new String[]{"15"},null,MessageAction.ACTION_SOMEONE_LIKE_ME_TIP));
+		
+		
+		Map<String, String> ext = new HashMap<String, String>();
+		ext.put("action", String.valueOf(MessageAction.ACTION_SOMEONE_LIKE_ME_TIP.ordinal()));
+		
+		System.out.println(sendCmdMessage("admin",new String[]{"15"},ext));
 	}
 
 	public static Object registUser(String userName, String password, String nickname) {
@@ -127,9 +132,9 @@ public class Main {
 	}
 	
 	
-	public static Object sendCmdMessage(String from, String[] users,Map<String, String> ext,MessageAction action) {
+	public static Object sendCmdMessage(String from, String[] users,Map<String, String> ext) {
 		initFactory();
-		BodyWrapper payload = new CmdMessageBody("users", users, from, ext,String.valueOf(action.ordinal()));
+		BodyWrapper payload = new CmdMessageBody("users", users, from, ext);
 		SendMessageAPI message = (SendMessageAPI) factory.newInstance(EasemobRestAPIFactory.SEND_MESSAGE_CLASS);
 		
 		

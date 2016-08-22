@@ -184,6 +184,12 @@ public class UserController {
 
 	}
 
+	/**
+	 * 登出
+	 * @param token
+	 * @param user_id
+	 * @return
+	 */
 	@RequestMapping("logout")
 	public ModelMap logout(String token, long user_id) {
 

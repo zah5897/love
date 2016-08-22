@@ -17,7 +17,6 @@ import com.zhan.app.sl.util.TextUtils;
 @RestController
 @RequestMapping("/system")
 public class SystemController {
-	private static Logger log = Logger.getLogger(SystemController.class);
 	@Resource
 	private UserService userService;
 	@Resource

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,12 +24,20 @@ import com.zhan.app.sl.util.TextUtils;
 @RestController
 @RequestMapping("/main")
 public class HomeController {
-	private static Logger log = Logger.getLogger(HomeController.class);
 	@Resource
 	private UserService userService;
 	@Resource
 	private UserInfoService userInfoService;
 
+	/**
+	 * 发现
+	 * 
+	 * @param user_id
+	 * @param lat
+	 * @param lng
+	 * @param count
+	 * @return
+	 */
 	@RequestMapping("found")
 	public ModelMap found(long user_id, String lat, String lng, Integer count) {
 		int realCount;
@@ -40,7 +47,7 @@ public class HomeController {
 			realCount = count;
 		}
 		List<User> users = userInfoService.getRandUsers(user_id, lat, lng, realCount);
-		List<Map> resultList = new ArrayList<Map>();
+		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
 		if (users != null) {
 			for (User user : users) {
 				Map<String, Object> userObj = new HashMap<String, Object>();
@@ -61,6 +68,15 @@ public class HomeController {
 		return result;
 	}
 
+	/**
+	 * 缘分场
+	 * 
+	 * @param user_id
+	 * @param token
+	 * @param last_user_id
+	 * @param page_size
+	 * @return
+	 */
 	@RequestMapping("fate_place")
 	public ModelMap fate_place(long user_id, String token, String last_user_id, int page_size) {
 		if (user_id < 0) {
@@ -91,6 +107,15 @@ public class HomeController {
 
 	}
 
+	/**
+	 * 喜欢某人
+	 * 
+	 * @param user_id
+	 * @param token
+	 * @param with_user_id
+	 *            被喜欢的某人
+	 * @return
+	 */
 	@RequestMapping("like")
 	public ModelMap like(long user_id, String token, String with_user_id) {
 
@@ -115,8 +140,8 @@ public class HomeController {
 		for (String id : with_ids) {
 			try {
 				long with_user = Long.parseLong(id);
-				User withUser=userService.getUser(with_user);
-				if (user_id == with_user||withUser==null) {
+				User withUser = userService.getUser(with_user);
+				if (user_id == with_user || withUser == null) {
 					continue;
 				}
 				userInfoService.updateRelationship(user, withUser, Relationship.LIKE.ordinal());
@@ -126,6 +151,15 @@ public class HomeController {
 		return ResultUtil.getResultOKMap();
 	}
 
+	/**
+	 * 点击 X 忽略
+	 * 
+	 * @param user_id
+	 * @param token
+	 * @param with_user_id
+	 *            被忽略的用户id
+	 * @return
+	 */
 	@RequestMapping("ignore")
 	public ModelMap ignore(long user_id, String token, String with_user_id) {
 
@@ -160,8 +194,21 @@ public class HomeController {
 		return ResultUtil.getResultOKMap();
 	}
 
+	/**
+	 * 获取互相喜欢的用户
+	 * 
+	 * @param user_id
+	 *            当前登陆用户
+	 * @param token
+	 *            登陆token
+	 * @param last_user_id
+	 *            分页 最后一条用户id
+	 * @param page_size
+	 *            分页参数
+	 * @return
+	 */
 	@RequestMapping("like_each")
-	public ModelMap like_each(long user_id, String token, long last_user_id, int page_size) {
+	public ModelMap get_like_each(long user_id, String token, long last_user_id, int page_size) {
 
 		if (page_size > 50) {
 			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("每页数量超出限制"));
@@ -179,7 +226,16 @@ public class HomeController {
 		return result;
 	}
 
-	// 游客接口
+	/**
+	 * 随便看看（ 游客接口）,具有注册功能
+	 * @param deviceId
+	 * @param deviceToken
+	 * @param zh_cn
+	 * @param lat
+	 * @param lng
+	 * @param count
+	 * @return
+	 */
 	@RequestMapping("look_around")
 	public ModelMap look_around(String deviceId, String deviceToken, String zh_cn, String lat, String lng,
 			Integer count) {

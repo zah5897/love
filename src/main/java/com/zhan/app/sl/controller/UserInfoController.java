@@ -38,6 +38,14 @@ public class UserInfoController {
 	@Resource
 	private UserCacheService userCacheService;
 
+	/**
+	 * 上传图片
+	 * 
+	 * @param multipartRequest
+	 * @param user_id
+	 * @param token
+	 * @return
+	 */
 	@RequestMapping("images")
 	public ModelMap images(DefaultMultipartHttpServletRequest multipartRequest, long user_id, String token) {
 
@@ -97,6 +105,26 @@ public class UserInfoController {
 		return result;
 	}
 
+	/**
+	 * 修改信息
+	 * 
+	 * @param user_id
+	 * @param token
+	 * @param nick_name
+	 * @param age
+	 * @param jobs
+	 * @param height
+	 * @param weight
+	 * @param signature
+	 * @param my_tags
+	 * @param interest
+	 * @param favourite_animal
+	 * @param favourite_music
+	 * @param weekday_todo
+	 * @param footsteps
+	 * @param want_to_where
+	 * @return
+	 */
 	@RequestMapping("modify_info")
 	public ModelMap modify_info(long user_id, String token, String nick_name, String age, String jobs, String height,
 			String weight, String signature, String my_tags, String interest, String favourite_animal,
@@ -129,6 +157,12 @@ public class UserInfoController {
 		return detial_info(user_id, null, null);
 	}
 
+	/**
+	 * 获取系统标签
+	 * 
+	 * @param type
+	 * @return
+	 */
 	@RequestMapping("tags")
 	public ModelMap getTags(int type) {
 		ModelMap result = ResultUtil.getResultOKMap();
@@ -139,7 +173,14 @@ public class UserInfoController {
 		return result;
 	}
 
-	// 获取自己的详情或者别人的详细信息
+	/**
+	 * 获取自己的详情或者别人的详细信息
+	 * 
+	 * @param user_id
+	 * @param user_id_for
+	 * @param count
+	 * @return
+	 */
 	@RequestMapping("detial_info")
 	public ModelMap detial_info(Long user_id, Long user_id_for, Integer count) {
 		if (user_id_for != null && user_id_for > 0) {
@@ -151,24 +192,40 @@ public class UserInfoController {
 		return UserDetailInfoUtil.getDetailInfo(userInfoService, user_id, count);
 	}
 
+	/**
+	 * 获取用户图片列表
+	 * 
+	 * @param user_id
+	 * @param last_image_id
+	 * @param count
+	 * @return
+	 */
 	@RequestMapping("list_image")
-	public ModelMap list_image(Long user_id, Long last_image_id,Integer count) {
-		if(user_id==null||user_id<1){
+	public ModelMap list_image(Long user_id, Long last_image_id, Integer count) {
+		if (user_id == null || user_id < 1) {
 			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
 		}
-		
-		if(last_image_id==null||last_image_id<0){
-			last_image_id=0l;
+
+		if (last_image_id == null || last_image_id < 0) {
+			last_image_id = 0l;
 		}
-		if(count==null||count<=0){
-			count=5;
+		if (count == null || count <= 0) {
+			count = 5;
 		}
-		List<Image> images=userInfoService.getUserImages(user_id, last_image_id, count);	
+		List<Image> images = userInfoService.getUserImages(user_id, last_image_id, count);
 		ModelMap result = ResultUtil.getResultOKMap();
 		result.put("images", images);
 		return result;
 	}
 
+	/**
+	 * 删除图片
+	 * 
+	 * @param user_id
+	 * @param token
+	 * @param image_id
+	 * @return
+	 */
 	@RequestMapping("del_image")
 	public ModelMap del_image(long user_id, String token, String image_id) {
 
@@ -197,6 +254,9 @@ public class UserInfoController {
 		return result;
 	}
 
+	/**
+	 * 更新位置信息
+	 */
 	@RequestMapping("update_location")
 	public ModelMap update_location(long user_id, String token, String lat, String lng) {
 

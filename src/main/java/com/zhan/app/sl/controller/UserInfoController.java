@@ -227,8 +227,13 @@ public class UserInfoController {
 	 * @return
 	 */
 	@RequestMapping("del_image")
-	public ModelMap del_image(long user_id, String token, String image_id) {
+	public ModelMap del_image(Long user_id, String token, String image_id) {
 
+		
+		if(user_id==null){
+			user_id=0l;
+		}
+		
 		if (user_id < 1) {
 			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
 		}
@@ -258,8 +263,13 @@ public class UserInfoController {
 	 * 更新位置信息
 	 */
 	@RequestMapping("update_location")
-	public ModelMap update_location(long user_id, String token, String lat, String lng) {
+	public ModelMap update_location(Long user_id, String token, String lat, String lng) {
 
+		
+		if(user_id==null){
+			user_id=0l;
+		}
+		
 		if (user_id < 1) {
 			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
 		}

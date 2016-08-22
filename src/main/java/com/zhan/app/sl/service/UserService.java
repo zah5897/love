@@ -4,12 +4,16 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.easemob.server.example.Main;
+import com.easemob.server.example.comm.wrapper.ResponseWrapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zhan.app.sl.bean.User;
 import com.zhan.app.sl.cache.UserCacheService;
+import com.zhan.app.sl.controller.UserController;
 import com.zhan.app.sl.dao.UserDao;
 import com.zhan.app.sl.exception.AppException;
 import com.zhan.app.sl.exception.ERROR;
@@ -22,6 +26,7 @@ public class UserService {
 	private UserDao userDao;
 	@Resource
 	private UserCacheService userCacheService;
+	private static Logger log = Logger.getLogger(UserService.class);
 
 	public User getUser(long id) {
 		return userDao.getUser(id);
@@ -50,11 +55,17 @@ public class UserService {
 			try {
 				String password = MD5Util.getMd5_16(String.valueOf(id));
 				Object resutl = Main.registUser(String.valueOf(id), password, user.getNick_name());
-				if (resutl != null) {
-					System.out.println(resutl);
+				if (resutl != null && (resutl instanceof ResponseWrapper)) {
+					ResponseWrapper response = (ResponseWrapper) resutl;
+
+					int status = response.getResponseStatus();
+					if (status != 200) {
+						ObjectNode node = (ObjectNode) response.getResponseBody();
+						throw new RuntimeException(node.get("error").toString());
+					}
 				}
 			} catch (Exception e) {
-				throw new AppException(ERROR.ERR_SYS.setNewText(" by 环信"),new RuntimeException("环信注册失败"));
+				throw new AppException(ERROR.ERR_SYS.setNewText(" by 环信"), new RuntimeException("环信注册失败"));
 			}
 		}
 		return id;
@@ -85,11 +96,10 @@ public class UserService {
 		// userCacheService.cacheValidateCode(mobile, code);
 		return count;
 	}
-	
-	public int updateVisitor(long user_id, String device_token,String lat, String lng,String zh_cn) {
+
+	public int updateVisitor(long user_id, String device_token, String lat, String lng, String zh_cn) {
 		int count = userDao.updateVisitor(user_id, device_token, lat, lng, zh_cn);
 		return count;
 	}
-	
-	
+
 }

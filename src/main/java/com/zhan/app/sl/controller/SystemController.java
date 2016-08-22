@@ -2,7 +2,6 @@ package com.zhan.app.sl.controller;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -25,6 +25,7 @@ import com.zhan.app.sl.bean.mapper.SimpkleUserMapper;
 import com.zhan.app.sl.comm.Relationship;
 import com.zhan.app.sl.comm.UserType;
 import com.zhan.app.sl.util.DateTimeUtil;
+import com.zhan.app.sl.util.SQLUtil;
 
 @Repository("userInfoDao")
 public class UserInfoDao extends BaseDao {
@@ -89,17 +90,17 @@ public class UserInfoDao extends BaseDao {
 		// values.add(job);
 		// }
 
-		appendSql(names, job, "job_ids", values);
-		appendSql(names, height, "height", values);
-		appendSql(names, weight, "weight", values);
-		appendSql(names, signature, "signature", values);
-		appendSql(names, my_tags, "my_tag_ids", values);
-		appendSql(names, interests, "interest_ids", values);
-		appendSql(names, animals, "animal_ids", values);
-		appendSql(names, musics, "music_ids", values);
-		appendSql(names, weekday_todo, "weekday_todo_ids", values);
-		appendSql(names, footsteps, "footstep_ids", values);
-		appendSql(names, want_to_where, "want_to_where", values);
+		SQLUtil.appendSql(names, job, "job_ids", values);
+		SQLUtil.appendSql(names, height, "height", values);
+		SQLUtil.appendSql(names, weight, "weight", values);
+		SQLUtil.appendSql(names, signature, "signature", values);
+		SQLUtil.appendSql(names, my_tags, "my_tag_ids", values);
+		SQLUtil.appendSql(names, interests, "interest_ids", values);
+		SQLUtil.appendSql(names, animals, "animal_ids", values);
+		SQLUtil.appendSql(names, musics, "music_ids", values);
+		SQLUtil.appendSql(names, weekday_todo, "weekday_todo_ids", values);
+		SQLUtil.appendSql(names, footsteps, "footstep_ids", values);
+		SQLUtil.appendSql(names, want_to_where, "want_to_where", values);
 
 		if (values.size() == 0) {
 			return 0;
@@ -110,17 +111,7 @@ public class UserInfoDao extends BaseDao {
 		Object[] params = values.toArray();
 		return jdbcTemplate.update(sql, params);
 	}
-
-	private void appendSql(StringBuilder sql_str, String param, String sql_field_name, List<Object> values) {
-		if (param != null) {
-			if (values.size() > 0) {
-				sql_str.append("," + sql_field_name + "=?");
-			} else {
-				sql_str.append(sql_field_name + "=?");
-			}
-			values.add(param);
-		}
-	}
+	 
 
 	public User getUserInfo(long user_id) {
 		List<User> list = jdbcTemplate.query("select *from t_user user where user.user_id=?", new Object[] { user_id },

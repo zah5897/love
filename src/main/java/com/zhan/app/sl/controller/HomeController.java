@@ -58,6 +58,7 @@ public class HomeController {
 				userObj.put("disc", user.getDisc());
 				userObj.put("jobs", user.getJobs());
 				userObj.put("images", user.getImages());
+				userObj.put("birthday", user.getBirthday());
 				userInfoService.setTagByIds(user);
 				userObj.put("interest", user.getInterest() != null ? user.getInterest() : new ArrayList<Tag>());
 				resultList.add(userObj);

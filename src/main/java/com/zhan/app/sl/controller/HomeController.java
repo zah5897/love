@@ -18,6 +18,7 @@ import com.zhan.app.sl.comm.UserType;
 import com.zhan.app.sl.exception.ERROR;
 import com.zhan.app.sl.service.UserInfoService;
 import com.zhan.app.sl.service.UserService;
+import com.zhan.app.sl.util.DateTimeUtil;
 import com.zhan.app.sl.util.ResultUtil;
 import com.zhan.app.sl.util.TextUtils;
 
@@ -58,7 +59,7 @@ public class HomeController {
 				userObj.put("disc", user.getDisc());
 				userObj.put("jobs", user.getJobs());
 				userObj.put("images", user.getImages());
-				userObj.put("birthday", user.getBirthday());
+				userObj.put("birthday", DateTimeUtil.parseBirthday(user.getBirthday()));
 				userInfoService.setTagByIds(user);
 				userObj.put("interest", user.getInterest() != null ? user.getInterest() : new ArrayList<Tag>());
 				resultList.add(userObj);

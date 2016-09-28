@@ -50,7 +50,7 @@ public class UserInfoController {
 	public ModelMap images(DefaultMultipartHttpServletRequest multipartRequest, long user_id, String token) {
 
 		if (user_id < 1) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM, "用户ID异常");
 		}
 		//
 		if (TextUtils.isEmpty(token)) {
@@ -130,7 +130,7 @@ public class UserInfoController {
 			String weight, String signature, String my_tags, String interest, String favourite_animal,
 			String favourite_music, String weekday_todo, String footsteps, String want_to_where) {
 		if (user_id < 1) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM, "用户ID异常");
 		}
 		//
 		if (TextUtils.isEmpty(token)) {
@@ -203,7 +203,7 @@ public class UserInfoController {
 	@RequestMapping("list_image")
 	public ModelMap list_image(Long user_id, Long last_image_id, Integer count) {
 		if (user_id == null || user_id < 1) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM, "用户ID异常");
 		}
 
 		if (last_image_id == null || last_image_id < 0) {
@@ -229,13 +229,12 @@ public class UserInfoController {
 	@RequestMapping("del_image")
 	public ModelMap del_image(Long user_id, String token, String image_id) {
 
-		
-		if(user_id==null){
-			user_id=0l;
+		if (user_id == null) {
+			user_id = 0l;
 		}
-		
+
 		if (user_id < 1) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM, "用户ID异常");
 		}
 
 		if (TextUtils.isEmpty(token)) {
@@ -243,7 +242,7 @@ public class UserInfoController {
 		}
 
 		if (TextUtils.isEmpty(image_id)) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("图片id不存在"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM, "图片id不存在");
 		}
 
 		User user = userService.getUser(user_id);
@@ -265,13 +264,12 @@ public class UserInfoController {
 	@RequestMapping("update_location")
 	public ModelMap update_location(Long user_id, String token, String lat, String lng) {
 
-		
-		if(user_id==null){
-			user_id=0l;
+		if (user_id == null) {
+			user_id = 0l;
 		}
-		
+
 		if (user_id < 1) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM, "用户ID异常");
 		}
 
 		if (TextUtils.isEmpty(token)) {
@@ -279,7 +277,7 @@ public class UserInfoController {
 		}
 
 		if (TextUtils.isEmpty(lat) || TextUtils.isEmpty(lng)) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("位置信息异常"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM, "位置信息异常");
 		}
 
 		User user = userService.getUser(user_id);

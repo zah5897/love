@@ -13,7 +13,6 @@ import com.easemob.server.example.comm.wrapper.ResponseWrapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zhan.app.sl.bean.User;
 import com.zhan.app.sl.cache.UserCacheService;
-import com.zhan.app.sl.controller.UserController;
 import com.zhan.app.sl.dao.UserDao;
 import com.zhan.app.sl.exception.AppException;
 import com.zhan.app.sl.exception.ERROR;
@@ -65,7 +64,7 @@ public class UserService {
 					}
 				}
 			} catch (Exception e) {
-				throw new AppException(ERROR.ERR_SYS.setNewText(" by 环信"), new RuntimeException("环信注册失败"));
+				throw new AppException(ERROR.ERR_SYS, new RuntimeException("环信注册失败"));
 			}
 		}
 		return id;

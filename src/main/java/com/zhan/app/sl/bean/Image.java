@@ -1,20 +1,20 @@
 package com.zhan.app.sl.bean;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zhan.app.sl.annotation.ColumnType;
 
 public class Image {
 	@ColumnType
-	public long id; //主键
-	@JSONField(serialize = false)
-	public String name; //数据库短名称 ，json 不序列号
-	@JSONField(serialize = false) 
-	public long user_id; //外键，关联user id字段，不json 序列化
+	public long id; // 主键
+	@JsonIgnore
+	public String name; // 数据库短名称 ，json 不序列号
+	@JsonIgnore
+	public long user_id; // 外键，关联user id字段，不json 序列化
 
 	@ColumnType
-	private String thumb; //无关数据库，主要json展示 缩略图
-	@ColumnType 
-	private String origin; //无关数据库，主要json展示  原始图
+	private String thumb; // 无关数据库，主要json展示 缩略图
+	@ColumnType
+	private String origin; // 无关数据库，主要json展示 原始图
 
 	public long getId() {
 		return id;

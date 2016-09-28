@@ -151,7 +151,7 @@ public class UserController {
 	public ModelMap loginByMobile(String mobile, String password, String _ua) {
 
 		if (TextUtils.isEmpty(mobile)) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("手机号码不能为空!"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM,"手机号码不能为空!");
 		}
 		if (TextUtils.isEmpty(password)) {
 			return ResultUtil.getResultMap(ERROR.ERR_PASSWORD);
@@ -194,13 +194,13 @@ public class UserController {
 	public ModelMap logout(String token, long user_id) {
 
 		if (TextUtils.isEmpty(token) || user_id < 1) {
-			return ResultUtil.getResultMap(ERROR.ERR_NO_LOGIN.setNewText("当前并未登陆"));
+			return ResultUtil.getResultMap(ERROR.ERR_NO_LOGIN,"当前并未登陆");
 		}
 
 		String cachetoken = userCacheService.getCacheToken(user_id);
 		if (cachetoken != null) {
 			if (!cachetoken.equals(token)) {
-				return ResultUtil.getResultMap(ERROR.ERR_NO_LOGIN.setNewText("当前并未登陆"));
+				return ResultUtil.getResultMap(ERROR.ERR_NO_LOGIN,"当前并未登陆");
 			}
 		}
 		User user = userService.getUser(user_id);
@@ -209,10 +209,10 @@ public class UserController {
 				userService.updateToken(new User(user_id));
 				userCacheService.clearLoginUser(token, user_id);
 			} else {
-				return ResultUtil.getResultMap(ERROR.ERR_NO_LOGIN.setNewText("当前并未登陆"));
+				return ResultUtil.getResultMap(ERROR.ERR_NO_LOGIN,"当前并未登陆");
 			}
 		} else {
-			return ResultUtil.getResultMap(ERROR.ERR_USER_NOT_EXIST.setNewText("当前用户不存在"));
+			return ResultUtil.getResultMap(ERROR.ERR_USER_NOT_EXIST,"当前用户不存在");
 		}
 
 		return ResultUtil.getResultOKMap();
@@ -322,7 +322,7 @@ public class UserController {
 	@RequestMapping("modify_avatar")
 	public ModelMap modify_avatar(DefaultMultipartHttpServletRequest multipartRequest, long user_id, String token) {
 		if (user_id < 1) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM,"用户ID异常");
 		}
 
 		if (TextUtils.isEmpty(token)) {

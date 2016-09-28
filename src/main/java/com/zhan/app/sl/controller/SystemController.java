@@ -25,14 +25,14 @@ public class SystemController {
 	public ModelMap report(long user_id, String token, long report_to_user_id, String report_tag_id, String content) {
 
 		if (user_id < 1) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM,"用户ID异常");
 		}
 		if (report_to_user_id < 1) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("被举报用户ID异常"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM,"被举报用户ID异常");
 		}
 
 		if (user_id == report_to_user_id) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("不能自己举报自己!"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM,"不能自己举报自己!");
 		}
 		//
 		if (TextUtils.isEmpty(token)) {

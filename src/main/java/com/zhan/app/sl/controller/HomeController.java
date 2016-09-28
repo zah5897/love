@@ -89,7 +89,7 @@ public class HomeController {
 		}
 
 		if (page_size > 100 || page_size < 1) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("每页数量值为[1-100]"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM,"每页数量值为[1-100]");
 		}
 		long last_user;
 		if (TextUtils.isEmpty(last_user_id)) {
@@ -98,7 +98,7 @@ public class HomeController {
 			try {
 				last_user = Long.parseLong(last_user_id);
 			} catch (NumberFormatException e) {
-				return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("最后一个用户ID参数异常"));
+				return ResultUtil.getResultMap(ERROR.ERR_PARAM,"最后一个用户ID参数异常");
 			}
 		}
 
@@ -213,7 +213,7 @@ public class HomeController {
 	public ModelMap get_like_each(long user_id, String token, long last_user_id, int page_size) {
 
 		if (page_size > 50) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("每页数量超出限制"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM,"每页数量超出限制");
 		}
 
 		if (user_id < 0) {
@@ -244,12 +244,12 @@ public class HomeController {
 
 		if (!TextUtils.isEmpty(zh_cn)) {
 			if (zh_cn.length() > 2) {
-				return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("zh-cn has too long,max &lt 2"));
+				return ResultUtil.getResultMap(ERROR.ERR_PARAM,"zh-cn has too long,max &lt 2");
 			}
 		}
 
 		if (TextUtils.isEmpty(deviceId)) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("deviceId is empty"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM,"deviceId is empty");
 		}
 
 		User user = userService.findUserByMobile(deviceId);

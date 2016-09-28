@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zhan.app.sl.annotation.ColumnType;
 import com.zhan.app.sl.comm.UserType;
 import com.zhan.app.sl.util.DateTimeUtil;
@@ -24,7 +25,7 @@ public class User {
 	@ColumnType
 	private long user_id;
 	private String mobile;
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private String password;
 	private String name;
 	private String nick_name;
@@ -51,7 +52,7 @@ public class User {
 	@ColumnType // 忽略保存
 	private List<Image> images;
 
-	@JSONField(serialize = false) // 数据库中以逗号分割，json不序列号
+	@JsonIgnore // 数据库中以逗号分割，json不序列号
 	private String job_ids;
 	@ColumnType // 忽略保存
 	private List<Tag> jobs;
@@ -59,58 +60,58 @@ public class User {
 	private String weight;// 体重
 	private String height;// 身高
 
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private String my_tag_ids;
 	@ColumnType // 忽略保存
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private List<Tag> my_tags;
 
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private String interest_ids;
 	@ColumnType // 忽略保存
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private List<Tag> interest;
 
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private String animal_ids;
 	@ColumnType // 忽略保存
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private List<Tag> favourite_animal;
 
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private String music_ids;
 	@ColumnType // 忽略保存
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private List<Tag> favourite_music;
 
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private String weekday_todo_ids;
 	@ColumnType // 忽略保存
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private List<Tag> weekday_todo;
 
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private String footstep_ids;
 	@ColumnType // 忽略保存
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private List<Tag> footsteps;
 
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private String want_to_where;
 
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private String disc;
 
 	// 区分游客和正式用户
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private short type = (short) UserType.OFFIEC.ordinal(); // 默认为正式用户
 
 	// 区分国外用户
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private String zh_cn;
 
 	// 设备token
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private String device_token;;
 
 	public long getUser_id() {

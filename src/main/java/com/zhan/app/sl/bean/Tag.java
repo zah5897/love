@@ -3,6 +3,7 @@ package com.zhan.app.sl.bean;
 import java.io.Serializable;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zhan.app.sl.annotation.ColumnType;
 
 public class Tag implements Serializable {
@@ -18,7 +19,7 @@ public class Tag implements Serializable {
 	public static final int TYPE_WEEKDAY = 6;
 	public static final int TYPE_FOOTSTEPS = 7;
 	// 系统主键 （不入库，不json序列化）
-	@JSONField(serialize = false)
+	@JsonIgnore
 	@ColumnType
 	private int sys_id;
 	private int id;

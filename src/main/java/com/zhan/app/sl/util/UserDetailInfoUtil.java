@@ -14,7 +14,7 @@ import com.zhan.app.sl.service.UserInfoService;
 public class UserDetailInfoUtil {
 	public static ModelMap getDetailInfo(UserInfoService userInfoService, Long user_id, int count) {
 		if (user_id == null || user_id < 1) {
-			return ResultUtil.getResultMap(ERROR.ERR_PARAM.setNewText("用户ID异常"));
+			return ResultUtil.getResultMap(ERROR.ERR_PARAM, "用户ID异常");
 		}
 		User user = userInfoService.getUserInfo(user_id, count);
 		if (user == null) {

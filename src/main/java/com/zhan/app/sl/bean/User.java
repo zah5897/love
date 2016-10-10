@@ -26,6 +26,7 @@ public class User {
 	private long user_id;
 	private String mobile;
 	@JsonIgnore
+	@JSONField(serialize=false)
 	private String password;
 	private String name;
 	private String nick_name;

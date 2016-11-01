@@ -293,6 +293,17 @@ public class UserInfoService {
 				if (result != null) {
 					System.out.println(result);
 				}
+				
+				
+				//系统推"附近有人喜欢了你"给对方
+				
+				result = Main.sendTxtMessage("admin",
+						new String[] { String.valueOf(with_user.getUser_id()) }, "附近有人喜欢了你！", null);
+				if (result != null) {
+					System.out.println(result);
+				}
+				
+				
 			} else {
 				// 发现对方没喜欢我
 				// 需要申请添加好友

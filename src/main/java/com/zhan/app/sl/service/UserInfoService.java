@@ -298,7 +298,7 @@ public class UserInfoService {
 				//系统推"附近有人喜欢了你"给对方
 				
 				result = Main.sendTxtMessage("admin",
-						new String[] { String.valueOf(with_user.getUser_id()) }, "附近有人喜欢了你！", null);
+						new String[] { String.valueOf(with_user.getUser_id()) }, "附近有人喜欢了你！", ext);
 				if (result != null) {
 					System.out.println(result);
 				}

@@ -1,6 +1,5 @@
 package com.easemob.server.example;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
@@ -14,7 +13,6 @@ import com.easemob.server.example.comm.body.TextMessageBody;
 import com.easemob.server.example.comm.wrapper.BodyWrapper;
 import com.easemob.server.example.comm.wrapper.ResponseWrapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.zhan.app.sl.comm.MessageAction;
 
 public class Main {
 	private static EasemobRestAPIFactory factory;

@@ -21,7 +21,6 @@ import com.zhan.app.sl.bean.Image;
 import com.zhan.app.sl.bean.User;
 import com.zhan.app.sl.bean.mapper.FateUserMapper;
 import com.zhan.app.sl.bean.mapper.FoundUserMapper;
-import com.zhan.app.sl.bean.mapper.SimpkleUserMapper;
 import com.zhan.app.sl.comm.Relationship;
 import com.zhan.app.sl.comm.UserType;
 import com.zhan.app.sl.util.DateTimeUtil;
